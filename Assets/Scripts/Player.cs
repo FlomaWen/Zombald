@@ -1,45 +1,55 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private static readonly int Hiting = Animator.StringToHash("hiting");
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float rotationSpeed = 200.0f;
-    public bool isAttacking = false;
+    public bool isAttacking;
     private Animator animator;
     private Vector3 moveDirection;
-    public event Action OnHit;
-    private static readonly int Hiting = Animator.StringToHash("hiting");
 
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
+        Animator animator = GetComponent<Animator>();
+        var horizontal = Input.GetAxis("Horizontal");
+        var vertical = Input.GetAxis("Vertical");
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 movementDirection = new Vector3(horizontal, 0, vertical);
+        var movementDirection = new Vector3(horizontal, 0, vertical);
         movementDirection.Normalize();
-        
-        transform.Translate(movementDirection* (moveSpeed * Time.deltaTime),Space.World);
 
-        if(movementDirection != Vector3.zero)
+        transform.Translate(movementDirection * (moveSpeed * Time.deltaTime), Space.World);
+
+        if (movementDirection != Vector3.zero)
         {
-            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            transform.rotation=Quaternion.RotateTowards(transform.rotation,toRotation,rotationSpeed * Time.deltaTime);
+            if (animator != null)
+            {
+                animator.SetBool("IsMooving", true);
+            }
+
+            var toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            transform.rotation =
+                Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
+        else {
+            animator.SetBool("IsMooving", false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Hit();
-        }
-
+        if (Input.GetKeyDown(KeyCode.Space)) Hit();
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Enemy>() != null) OnHit?.Invoke();
+    }
+
+    public event Action OnHit;
 
     public void Hit()
     {
@@ -49,19 +59,7 @@ public class Player : MonoBehaviour
 
     public void StopHit()
     {
-        animator.SetBool("hiting",false);
-        isAttacking = false; 
+        animator.SetBool("hiting", false);
+        isAttacking = false;
     }
-
-    
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.GetComponent<Enemy>() != null)
-        {
-            OnHit?.Invoke();
-        }
-    }
-
 }
-
