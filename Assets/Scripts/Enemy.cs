@@ -35,6 +35,14 @@ public class Enemy : MonoBehaviour
         }
 
         transform.position += direction * (speed * Time.deltaTime);
+    }
+
+    private void ChangeDirection()
+    {
+        // Génère une nouvelle direction aléatoire sur le plan horizontal
+        float randomX = UnityEngine.Random.Range(-1f, 1f);
+        float randomZ = UnityEngine.Random.Range(-1f, 1f);
+        direction = new Vector3(randomX, 0f, randomZ).normalized;
         transform.LookAt(transform.position + direction);
     }
 
