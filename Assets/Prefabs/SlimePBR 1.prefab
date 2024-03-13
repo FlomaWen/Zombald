@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 3674105656321405112}
   m_Layer: 0
   m_Name: SlimePBR 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -461,7 +461,7 @@ Animator:
   m_GameObject: {fileID: 1931298151966786}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6520c6d7889f4c72b416f07f34edd515, type: 3}
-  m_Controller: {fileID: 9100000, guid: 9bbcf96c9a254c5ba654027c656d7b39, type: 2}
+  m_Controller: {fileID: 9100000, guid: 89c621b6cadf046528e01cc0e5fb5588, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -484,8 +484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feae549430fec224ab57ed6df3b1ad94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxOffset: 5
   speed: 5
+  changeDirectionTime: 2
 --- !u!54 &4712668186360042491
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -511,7 +511,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!135 &3674105656321405112
 SphereCollider:

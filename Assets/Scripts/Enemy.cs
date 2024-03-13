@@ -1,45 +1,40 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    // Intervalle de temps avant de changer de direction
-    [SerializeField] private float changeDirectionTime = 2f; 
+    [SerializeField] private float changeDirectionTime = 2f;
     private Vector3 direction;
-    private float timer;
-    
-    private Spawner mySpawner;
 
-    public event Action<Enemy> OnHit;
+    private Spawner mySpawner;
+    private float timer;
 
     public void Start()
     {
-        // Commence avec une direction aléatoire
+        Animator animator = GetComponent<Animator>();
         ChangeDirection();
-    }
-
-    public void Initialize(Spawner spawner)
-    {
-        mySpawner = spawner;
+        animator.SetBool("IsMooving", true);
     }
 
     private void Update()
     {
+        Animator animator = GetComponent<Animator>();
         timer += Time.deltaTime;
 
-        // Change de direction à intervalles réguliers
         if (timer >= changeDirectionTime)
         {
+            if (animator != null)
+            {
+                animator.SetBool("IsMooving", true);
+            }
             ChangeDirection();
+            //animator.SetBool("IsMooving", false);
             timer = 0f;
         }
 
-        // Déplace l'ennemi dans la direction actuelle
         transform.position += direction * (speed * Time.deltaTime);
-        
     }
 
     private void ChangeDirection()
@@ -48,18 +43,32 @@ public class Enemy : MonoBehaviour
         float randomX = UnityEngine.Random.Range(-1f, 1f);
         float randomZ = UnityEngine.Random.Range(-1f, 1f);
         direction = new Vector3(randomX, 0f, randomZ).normalized;
+        transform.LookAt(transform.position + direction);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null && player.isAttacking) 
+        var player = collision.gameObject.GetComponent<Player>();
+        if (player != null && player.isAttacking)
         {
-            // Le joueur a touché l'ennemi et le détruit
             mySpawner.EnemyDestroyed();
 
             OnHit?.Invoke(this);
             Destroy(gameObject);
         }
+    }
+
+    public event Action<Enemy> OnHit;
+
+    public void Initialize(Spawner spawner)
+    {
+        mySpawner = spawner;
+    }
+
+    private void ChangeDirection()
+    {
+        var randomX = Random.Range(-1f, 1f);
+        var randomZ = Random.Range(-1f, 1f);
+        direction = new Vector3(randomX, 0f, randomZ).normalized;
     }
 }
