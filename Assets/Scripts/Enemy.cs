@@ -25,7 +25,6 @@ public class Enemy : MonoBehaviour
 
         if (timer >= changeDirectionTime)
         {
-            Debug.Log("ChangeDirection");
             if (animator != null)
             {
                 animator.SetBool("IsMooving", true);

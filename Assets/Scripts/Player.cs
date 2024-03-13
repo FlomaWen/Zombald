@@ -7,12 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float rotationSpeed = 200.0f;
     public bool isAttacking;
-    private Animator animator;
-    private Vector3 moveDirection;
+    private Animator _animator;
+    private Vector3 _moveDirection;
+    public HealthScript healthScript;
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -46,6 +47,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            healthScript.TakeDamage(1);
+        }
         if (collision.gameObject.GetComponent<Enemy>() != null) OnHit?.Invoke();
     }
 
@@ -54,12 +59,12 @@ public class Player : MonoBehaviour
     public void Hit()
     {
         isAttacking = true;
-        animator.SetBool("hiting", true);
+        _animator.SetBool("hiting", true);
     }
 
     public void StopHit()
     {
-        animator.SetBool("hiting", false);
+        _animator.SetBool("hiting", false);
         isAttacking = false;
     }
 }
