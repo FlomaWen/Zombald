@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float changeDirectionTime = 2f; 
     private Vector3 direction;
     private float timer;
-
+    
     private Spawner mySpawner;
 
     public event Action<Enemy> OnHit;
@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
 
         // Déplace l'ennemi dans la direction actuelle
         transform.position += direction * (speed * Time.deltaTime);
+        
     }
 
     private void ChangeDirection()
