@@ -13,6 +13,9 @@ public class Spawner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI enemyleftText;
     private int enemiesRemainingToSpawn;
     private bool isFirstRound = true;
+    public Transform teleportTarget;
+    public Camera currentCamera;
+    public Camera newCamera;
 
     private float lastSpawnTime;
     private int spawnCount;
@@ -54,6 +57,35 @@ public class Spawner : MonoBehaviour
         if (roundText != null) roundText.text = "MANCHE " + currentRound;
         Debug.Log("Manche " + currentRound);
         if (enemyleftText != null) enemyleftText.text = "Ennemis restants: " + spawnCount;
+
+        if (currentRound == 5)
+        {
+            TeleportPlayer();
+            SwitchCamera();
+        }
+    }
+    
+    public void SwitchCamera()
+    {
+        if (currentCamera != null)
+        {
+            currentCamera.enabled = false; // Disable the current camera
+        }
+
+        if (newCamera != null)
+        {
+            newCamera.enabled = true; // Enable the new camera
+            currentCamera = newCamera; // Update the current camera reference
+        }
+    }
+    
+    void TeleportPlayer()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null && teleportTarget != null)
+        {
+            player.transform.position = teleportTarget.position;
+        }
     }
 
     public void EnemyDestroyed()

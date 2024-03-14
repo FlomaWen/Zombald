@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
 
     private Spawner mySpawner;
     private float timer;
+    
+    public GameObject coinPrefab;
 
     public void Start()
     {
@@ -52,7 +54,16 @@ public class Enemy : MonoBehaviour
             mySpawner.EnemyDestroyed();
 
             OnHit?.Invoke(this);
+            DropCoin();
             Destroy(gameObject);
+        }
+    }
+    
+    void DropCoin()
+    {
+        if (coinPrefab != null)
+        {
+            Instantiate(coinPrefab, transform.position, Quaternion.identity);
         }
     }
 
