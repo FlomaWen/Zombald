@@ -2,47 +2,66 @@ using UnityEngine;
 
 public class Golem : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.8f;
+    // [SerializeField] private float speed = 0.8f;
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody body;
-    [SerializeField] private float changeDirectionTime = 8f; 
-    private Vector3 direction;
-    private float timer;
+    
+    public float chaseRange = 1f; // Distance at which the monster starts chasing
+    public float attackRange = 2f; // Distance at which the monster attacks
+    public float moveSpeed = 5f; // Movement speed of the monster
+
+    private Transform player;
+    // private bool isChasing = false;
 
     private void Start()
     {
-        ChangeDirection();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Change de direction à intervalles réguliers
-        if (timer >= changeDirectionTime)
+        if (distanceToPlayer <= attackRange)
         {
-            ChangeDirection();
-            timer = 0f;
+            // isChasing = false;
+            animator.SetBool("Run", false);
+            animator.SetBool("IdleAction", true);
+            AttackPlayer();
         }
-
-        // Déplace le monstre dans la direction actuelle
-        body.velocity = direction * speed;
-
-        // Obtient la rotation vers la direction de déplacement
-        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-        
-        // Tourne le monstre vers la direction de déplacement
-        body.MoveRotation(targetRotation);
-
-        // Joue l'animation de marche
-        animator.SetFloat("Walk",0.2f);
+        else if (distanceToPlayer <= chaseRange && distanceToPlayer > attackRange)
+        {
+            // isChasing = true;
+            animator.SetBool("Run", true);
+            animator.SetBool("IdleAction", false);
+            ChasePlayer();
+        }
+        else
+        {
+            // isChasing = false;
+            animator.SetBool("Run", false);
+            animator.SetBool("IdleAction", true);
+            // Optionally, stop moving when the player is out of range
+        }
+    }
+    
+    void ChasePlayer()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+        transform.LookAt(player);
     }
 
-    private void ChangeDirection()
+    void AttackPlayer()
     {
-        // Génère une nouvelle direction aléatoire sur le plan horizontal
-        float randomX = Random.Range(-1f, 1f);
-        float randomZ = Random.Range(-1f, 1f);
-        direction = new Vector3(randomX, 0f, randomZ).normalized;
+        // Attack logic here
+        Debug.Log("Attacking the player!");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("InvisibleWall"))
+        {
+            animator.SetBool("IdleAction", true);
+        }
     }
 }

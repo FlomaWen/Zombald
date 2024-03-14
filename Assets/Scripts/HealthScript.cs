@@ -9,8 +9,8 @@ public class HealthScript : MonoBehaviour
     public Sprite halfHeart;
     public Sprite emptyHeart;
     
-    private float _currentHealth = 26;
-    private int _maxHearts = 13;
+    private float _currentHealth = 6;
+    private int _maxHearts = 3;
 
     private void Start()
     {

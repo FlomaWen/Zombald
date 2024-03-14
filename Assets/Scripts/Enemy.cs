@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour
                 animator.SetBool("IsMooving", true);
             }
             ChangeDirection();
-            //animator.SetBool("IsMooving", false);
             timer = 0f;
         }
 
@@ -39,7 +38,6 @@ public class Enemy : MonoBehaviour
 
     private void ChangeDirection()
     {
-        // Génère une nouvelle direction aléatoire sur le plan horizontal
         float randomX = UnityEngine.Random.Range(-1f, 1f);
         float randomZ = UnityEngine.Random.Range(-1f, 1f);
         direction = new Vector3(randomX, 0f, randomZ).normalized;
@@ -64,11 +62,5 @@ public class Enemy : MonoBehaviour
     {
         mySpawner = spawner;
     }
-
-    private void ChangeDirection()
-    {
-        var randomX = Random.Range(-1f, 1f);
-        var randomZ = Random.Range(-1f, 1f);
-        direction = new Vector3(randomX, 0f, randomZ).normalized;
-    }
+    
 }

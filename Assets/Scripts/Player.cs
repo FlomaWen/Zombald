@@ -51,6 +51,10 @@ public class Player : MonoBehaviour
         {
             healthScript.TakeDamage(1);
         }
+        // if (collision.gameObject.CompareTag("Boss"))
+        // {
+        //     healthScript.TakeDamage(1);
+        // }
         if (collision.gameObject.GetComponent<Enemy>() != null) OnHit?.Invoke();
     }
 
