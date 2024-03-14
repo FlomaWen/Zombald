@@ -8,7 +8,7 @@ public class HealthScript : MonoBehaviour
     public Sprite fullHeart;
     public Sprite halfHeart;
     public Sprite emptyHeart;
-    
+    public GameOver gameOver;
     private float _currentHealth = 6;
     private int _maxHearts = 3;
 
@@ -22,6 +22,11 @@ public class HealthScript : MonoBehaviour
         _currentHealth -= damage;
         if (_currentHealth < 0) _currentHealth = 0;
         UpdateHeartsUI();
+        
+        if (_currentHealth == 0)
+        {
+            gameOver.Setup();
+        }
     }
     
     public void AddHeartContainer()

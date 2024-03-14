@@ -977,6 +977,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   changeDirectionTime: 2
+  coinPrefab: {fileID: 488504562081579471, guid: e28df0dd6e50b4f59b7a89c61ebac20f,
+    type: 3}
 --- !u!54 &7411466450744917483
 Rigidbody:
   m_ObjectHideFlags: 0

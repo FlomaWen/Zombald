@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,13 +8,20 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float rotationSpeed = 200.0f;
     public bool isAttacking;
+    public Enemy targetEnemy;
     private Animator _animator;
     private Vector3 _moveDirection;
     public HealthScript healthScript;
+    
+    [SerializeField] private TextMeshProUGUI coinsText;
+    public int coins = 0;
+
+    [SerializeField] private AudioSource music;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
+        music.Play();
     }
 
     private void Update()
@@ -43,6 +51,8 @@ public class Player : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) Hit();
+        
+        if (coinsText != null) coinsText.text = coins.ToString();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -56,6 +66,11 @@ public class Player : MonoBehaviour
             healthScript.TakeDamage(1);
         }
     }
+    
+    public void AddCoin()
+    {
+        coins++;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -66,8 +81,12 @@ public class Player : MonoBehaviour
 
     public void Hit()
     {
-        isAttacking = true;
-        _animator.SetBool("hiting", true);
+        _animator.SetBool(Hiting, true);
+        if (targetEnemy != null && !isAttacking)
+        {
+            isAttacking = true;
+            targetEnemy.TakeDamage();
+        }
     }
 
     public void StopHit()

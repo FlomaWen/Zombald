@@ -45,25 +45,19 @@ public class Enemy : MonoBehaviour
         direction = new Vector3(randomX, 0f, randomZ).normalized;
         transform.LookAt(transform.position + direction);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        var player = collision.gameObject.GetComponent<Player>();
-        if (player != null && player.isAttacking)
-        {
-            mySpawner.EnemyDestroyed();
-
-            OnHit?.Invoke(this);
-            DropCoin();
-            Destroy(gameObject);
-        }
-    }
     
+    public void TakeDamage()
+    {
+        mySpawner.EnemyDestroyed();
+        OnHit?.Invoke(this);
+        DropCoin();
+        Destroy(gameObject);
+    }
     void DropCoin()
     {
         if (coinPrefab != null)
         {
-            Instantiate(coinPrefab, transform.position, Quaternion.identity);
+            Instantiate(coinPrefab, transform.position + Vector3.up, Quaternion.identity);
         }
     }
 
