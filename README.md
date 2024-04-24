@@ -1,4 +1,4 @@
 *** Zombald ***
 - MAXIME Théo
 - MOHAMED Yanis
-- Florian
+- PESCOT-JOURDAN Florian
